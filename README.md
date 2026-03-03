@@ -283,36 +283,94 @@ Zgodnie z wymaganiem zadania, analiza została przeprowadzona przy użyciu **[Cl
 
 ---
 
-## ❓ FAQ - Na Rozmowę Techniczną
+## ❓ Przygotowanie do Rozmowy Technicznej
 
-**P: Co jest adapterem między User Story a Event Storming?**  
-A: Event Storming maps *system behavior*, User Story captures *user needs*. Event Storming pokazuje event chain, User Story mówi "why". Np. User Story "Chcę publikować o określonym czasie" → Event: PublicationScheduled → Event: ScheduledPublicationTriggered. Events są skutkami user actions.
+### Pytanie 1: Czym różni się Event od Komendy od akcji UI?
 
-**P: Czemu Content Calendar jest Phase 1, a nie Analytics?**  
-A: Analytics ma wyższy risk (GA4 integration, data accuracy, potential GDPR issues). Content Calendar ma niższy risk, szybszy ROI (users widzi rezultat zaraz). MVP first, then scale.
+| Pojęcie | Definicja | Przykład w Floowe |
+|---------|-----------|-------------------|
+| **Akcja UI** | Kliknięcie przycisku przez użytkownika — warstwa prezentacji, nie biznesowa | Użytkownik klika przycisk „Opublikuj" w edytorze |
+| **Komenda** (`Command`) | Intencja/żądanie zmiany stanu systemu. Może zostać odrzucona (np. limit artykułów wyczerpany) | `PublishArticle(articleId, channels[])` |
+| **Event** | Fakt który już się zdarzył — nieodwracalny, zapisany w historii systemu | `ArticlePublished`, `PostCreatedOnFacebook` |
 
-**P: Czy Team Collab jest absolutnie konieczny?**  
-A: Nie dla SME (1-2 osób). Ale dla Enterprise (5-10 osób) YES. Revenue opportunity: $50K/year z team seats. Trade-off: Complexity vs Revenue.
+**Kluczowa różnica**: Komenda to prośba ("zrób to"), Event to historia ("to się stało"). Jedno kliknięcie UI → 1 Komenda → wiele Eventów (np. `PublishArticle` → `ArticlePublished` + `PostCreatedOnFacebook` + `ThreadCreatedOnX` + `UserNotified`).
 
-**P: Jak mitigate risk że Analytics będzie powolny?**  
-A: Pre-calculation (async job, store daily aggregates). Caching (Redis 6h TTL). Slow queries optimized (indices). Load test before launch.
+---
 
-**P: Event Storming jaki jest benefit over User Stories?**  
-A: User Stories focus na 1 user. Event Storming maps ENTIRE system (all events, all integrations). Pokazuje downstream effects. Np. "Publish article" triggeruje: PublishToFacebook event + AnalyticsTracking event + NotifyAuthor event. System thinking.
+### Pytanie 2: Dlaczego Content Calendar jest Phase 1, a nie Analytics?
+
+**Decyzja oparta na 3 kryteriach**:
+
+| Kryterium | Content Calendar (Phase 1) | Analytics (Phase 2) |
+|-----------|---------------------------|---------------------|
+| **Złożoność techniczna** | Niska — własna baza danych, job queue, UI calendar | Wysoka — 3 zewnętrzne API (GA4, GSC, social media), OAuth, GDPR |
+| **Ryzyko** | Niskie — brak zewnętrznych zależności | Wysokie — GA4 delays 24h, API rate limits, token security |
+| **Time-to-value** | 2 miesiące, użytkownik widzi wartość od razu | 4 miesiące, wartość widoczna dopiero po zebraniu danych historycznych |
+
+**Uzasadnienie biznesowe**: Content Calendar rozwiązuje problem regularności publikacji (bezpośredni wpływ na SEO użytkownika) bez ryzyka regulacyjnego. Analytics bez danych historycznych nie daje wartości — musi być poprzedzone miesiącami regularnych publikacji, które Content Calendar właśnie umożliwia. Fazy są ze sobą zależne: Calendar → dane → Analytics.
+
+---
+
+### Pytanie 3: Dlaczego te 3 funkcje, a nie inne?
+
+**Ramy decyzyjne — Impact vs Effort vs Risk**:
+
+```
+                HIGH IMPACT
+                    │
+     Team Collab ●  │  ● Analytics
+                    │
+LOW EFFORT ─────────┼───────── HIGH EFFORT
+                    │
+  Content Cal ●     │
+                    │
+                LOW IMPACT
+```
+
+Wybrane funkcje pokrywają **3 różne problemy wartości**:
+1. **Analytics** → użytkownik nie widzi ROI → churn po 60 dniach (retention problem)
+2. **Content Calendar** → publikowanie ad-hoc → słabe SEO → użytkownik nie rozumie dlaczego nie działa (activation problem)
+3. **Team Collaboration** → jeden użytkownik → brak możliwości skalowania biznesu klienta → brak upsell (monetization problem)
+
+Odrzucone alternatywy i powód:
+- **YouTube/TikTok integration** — nowy kanał bez popytu potwierdzonego (assumption risk)
+- **A/B testing artykułów** — zbyt niszowe dla SME bez dużego traffic
+- **Template system** — nice-to-have, nie rozwiązuje żadnego core pain point
+
+---
+
+### Pytanie 4: Co to jest Bounded Context i jak go widzisz w modelu Floowe?
+
+Bounded Context = logiczna granica domeny, w której określone pojęcia mają jednoznaczne znaczenie i model danych jest spójny wewnętrznie.
+
+**W Floowe zidentyfikowałem 4 Bounded Contexts** (widoczne w diagramach Mermaid):
+
+| Bounded Context | Co zawiera | Dlaczego oddzielny |
+|----------------|------------|--------------------|
+| `Content Creation` | Article, Editor, AI generation | Inne reguły biznesowe niż publikacja — artykuł może istnieć bez publikacji |
+| `Publication` | PublicationManager, Channels, Policy | Odpowiada za dystrybucję — niezależnie od tego jak treść powstała |
+| `Collaboration` | TeamWorkflow, Reviews, Permissions | Własny model ról (EDITOR/REVIEWER/APPROVER) — nieistotny dla tworzenia solo |
+| `Analytics` | Metrics, Dashboard, Recommendations | Dane read-only z zewnętrznych źródeł — nie modyfikuje artykułów, tylko je obserwuje |
+
+Granice widać po tym, że **`Article` w BC Content Creation** to `{title, content, status: DRAFT}`, a **`Article` w BC Analytics** to `{articleId, pageViews, ranking}` — ten sam obiekt, różna reprezentacja w różnym kontekście.
+
+---
+
+### Pytanie 5: Jakie są założenia których nie możesz potwierdzić bez dostępu do kodu?
+
+1. **Stack techniczny** — założono React + Node.js + PostgreSQL na podstawie typowego SaaS polskiego origin. Może być inne (Next.js, Laravel, różna baza).
+2. **Czy WordPress integration istnieje** — na stronie nie potwierdzone jednoznacznie, oznaczone jako `?`
+3. **Obecna architektura monolith vs microservices** — wpływa na koszt dodania nowych serwisów (Analytics, Scheduling)
+4. **Dane o churnie i retention** — liczby (+40% retention z Analytics) to szacunki branżowe, nie dane Floowe
 
 ---
 
 ## 📞 Kontakt / Pytania
 
-Analiza dostępna do dyskusji. Gotów obronić każde design decision i wyjaśnić Event Storming diagram.
-
-**Kluczowe Założenia do Potwierdzenia**:
-1. Stack techniczny (React + Node.js + PostgreSQL) - czy poprawny?
-2. Target market (SMEs) - czy fokus właściwy?
-3. 3 features selected - czy alignment z paliami biznesu?
+Analiza dostępna do dyskusji. Gotów obronić każde design decision i wyjaśnić diagram Event Storming.
 
 ---
 
-**Version**: 1.0  
-**Last Updated**: 2025-03-03  
+**Version**: 2.0  
+**Last Updated**: Marzec 2026  
 **Status**: ✅ Ready for Technical Interview
