@@ -19,13 +19,25 @@ Event Storming to technika modelowania procesów biznesowych gdzie:
 
 ```mermaid
 flowchart LR
-    A1(["👤 Content Manager"]) -->|"KOMENDA: CreateArticle"| AGG1["📄 AGREGAT: Article\nstatus: DRAFT"]
-    AGG1 -->|"EVENT: ArticleContentGenerated"| AGG2["✏️ AGREGAT: Editor\nWYSIWYG"]
-    AGG2 -->|"KOMENDA: EditArticle\nAddImages / UpdateSEOMeta"| EVT1(["EVENT: ArticleEdited\nImagesAdded / SEOMetaUpdated"])
-    EVT1 --> AGG3["📢 AGREGAT: PublicationManager\nWebsite / Facebook / LinkedIn / X"]
-    AGG3 -->|"KOMENDA: PublishArticle"| POL1{"|POLICY:\nAutoAdaptContent\nToChannels|"}
-    POL1 -->|"EVENT: ArticlePublished"| EVT2(["PostCreatedOnFacebook\nPostCreatedOnLinkedIn\nThreadCreatedOnX\nArticleAddedToWebsite"])
-    EVT2 --> AGG4["📋 AGREGAT: PublicationHistory"]
+    subgraph BC1["📦 Bounded Context: Content Creation"]
+        A1(["👤 Content Manager"])
+        AGG1["📄 AGREGAT: Article\nstatus: DRAFT"]
+        AGG2["✏️ AGREGAT: Editor\nWYSIWYG"]
+        EVT1(["EVENT: ArticleEdited\nImagesAdded / SEOMetaUpdated"])
+    end
+    subgraph BC2["📦 Bounded Context: Publication"]
+        AGG3["📢 AGREGAT: PublicationManager\nWebsite / Facebook / LinkedIn / X"]
+        POL1{"|POLICY:\nAutoAdaptContent\nToChannels|"}
+        EVT2(["PostCreatedOnFacebook\nPostCreatedOnLinkedIn\nThreadCreatedOnX\nArticleAddedToWebsite"])
+        AGG4["📋 AGREGAT: PublicationHistory"]
+    end
+    A1 -->|"KOMENDA: CreateArticle"| AGG1
+    AGG1 -->|"EVENT: ArticleContentGenerated"| AGG2
+    AGG2 -->|"KOMENDA: EditArticle\nAddImages / UpdateSEOMeta"| EVT1
+    EVT1 --> AGG3
+    AGG3 -->|"KOMENDA: PublishArticle"| POL1
+    POL1 -->|"EVENT: ArticlePublished"| EVT2
+    EVT2 --> AGG4
 ```
 
 ---
@@ -236,19 +248,25 @@ flowchart LR
 
 ```mermaid
 flowchart TD
-    subgraph COLLAB["🤝 TIER 3: Team Collaboration"]
-        A3(["👥 Team Member"]) -->|"ReviewArticle / LeaveComment"| R1(["ArticleUnderReview\nCommentAdded\nArticleApproved"])
+    subgraph BC_COLLAB["📦 Bounded Context: Collaboration"]
+        A3(["👥 Team Member"])
+        R1(["ArticleUnderReview\nCommentAdded\nArticleApproved"])
+        A3 -->|"ReviewArticle / LeaveComment"| R1
     end
-    subgraph SCHED["📅 TIER 1: Content Calendar"]
-        A1(["👤 Content Manager"]) -->|"SchedulePublication"| CAL["📅 ContentCalendar\nMonth/Week View\nAI Optimal Time"]
-        R1 -->|"ArticleApproved"| CAL
-        CAL -->|"ScheduledTimeArrives"| PUB(["✅ ArticlePublished\nAll Channels"])
+    subgraph BC_SCHED["📦 Bounded Context: Scheduling"]
+        CAL["📅 ContentCalendar\nMonth/Week View\nAI Optimal Time"]
+        PUB(["✅ ArticlePublished\nAll Channels"])
+        CAL -->|"ScheduledTimeArrives"| PUB
     end
-    subgraph ANALY["📊 TIER 2: Analytics"]
-        PUB -->|"AnalyticsDataSynced"| MET["📈 ArticleMetrics\nViews / Engagement\nGoogle Ranking / ROI"]
-        MET -->|"PerformanceMetricsCalculated"| DASH["🖥️ Dashboard v2\nRecommendations\nRepurposing Alerts"]
+    subgraph BC_ANALYTICS["📦 Bounded Context: Analytics"]
+        MET["📈 ArticleMetrics\nViews / Engagement\nGoogle Ranking / ROI"]
+        DASH["🖥️ Dashboard v2\nRecommendations\nRepurposing Alerts"]
+        MET -->|"PerformanceMetricsCalculated"| DASH
     end
-    A1 -->|"InviteTeamMember"| A3
+    A1(["👤 Content Manager"]) -->|"InviteTeamMember"| A3
+    A1 -->|"SchedulePublication"| CAL
+    R1 -->|"ArticleApproved"| CAL
+    PUB -->|"AnalyticsDataSynced"| MET
 ```
 
 ---
@@ -589,9 +607,9 @@ RETENTION/GROWTH TIER:
 - Brak upsell oportunity
 
 ### TO-BE Obserwacje
-+ Team collaboration → aumenty płatności (dodatkowe seat'y)
-+ Analytics → descobera retention (użytkownik chce widzieć wyniki)
-+ Content Calendar → buduje habit (tygodniowy workflow)
-+ AI recommendations → reuse starszych assetsów (maksymalizacja value)
-+ Performance metrics → konkurencyjna przewaga vs Jasper AI
++ Team collaboration → wzrost przychodów (dodatkowe płatne seat'y w planie team)
++ Analytics → poprawia retention (użytkownik widzi wartość i zostaje na subskrypcji)
++ Content Calendar → buduje nawyk (regularny tygodniowy workflow = lepsze SEO)
++ AI recommendations → ponowne wykorzystanie istniejących treści (maksymalizacja value bez dodatkowego kosztu)
++ Performance metrics → przewaga konkurencyjna vs Jasper AI (który nie ma wbudowanej analityki)
 
