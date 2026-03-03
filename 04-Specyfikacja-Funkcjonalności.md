@@ -17,8 +17,8 @@ Kryteria Akceptacji:
 - [ ] Widzę engagement metrics per platform (FB likes, LinkedIn impressions, X retweets)
 - [ ] Mogę zobaczyć artykuł ranking w Google dla jego keywords
 - [ ] Data jest aktualizowana co 6 godzin z Google Analytics 4
-- [ ] Mogę exportować raport jako PDF/CSV
-- [ ] Comparative: This month vs last month
+- [ ] Mogę wyeksportować raport jako PDF/CSV
+- [ ] Porównanie: ten miesiąc vs poprzedni miesiąc
 - [ ] Mogę filtrować artykuły po dacie, statusie, platformie, narzędziu
 - [ ] Wideę zalecenia: "Artykuł generuje 150 views/dzień, spróbuj repurpose na YouTube"
 - [ ] ROI estimate: (PageViews × 0.05 PLN avg) = Estymowana wartość (dla planów płatnych to upsell)
