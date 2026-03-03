@@ -1,6 +1,14 @@
 # Floowe - Analiza Produktu i Roadmap Funkcjonalności
 
-## 📋 Spis Treści
+## � Repozytorium GitHub
+
+**Link do publicznego repo**: [https://github.com/NikopolNiko/floowe-project](https://github.com/NikopolNiko/floowe-project)
+
+> Analiza wykonana przy użyciu **Claude Code** (claude.ai/code) zgodnie z wymaganiami zadania.
+
+---
+
+## �📋 Spis Treści
 
 To repozytorium zawiera kompletną analizę produktu **Floowe** - aplikacji do automatycznego tworzenia i publikowania treści na stronach internetowych i mediach społecznościowych.
 
@@ -240,12 +248,26 @@ Analiza wykonana przy użyciu:
 - **Feature Specification**: User Stories, Business Cases, Technical Reviews, Risk Analysis
 - **Risk Management**: High-impact/high-probability risks z mitigation strategies
 
+## 🤖 Wykorzystanie Claude Code
+
+Zgodnie z wymaganiem zadania, analiza została przeprowadzona przy użyciu **[Claude Code](https://docs.claude.com/claude-code)**:
+
+| Etap | Użycie Claude Code |
+|------|--------------------|
+| Krok 1 – Analiza Floowe | Analiza strony floowe.com, identyfikacja funkcji, UX/UI, modelu biznesowego |
+| Krok 2 – Przepływy | Mapowanie user flows, use cases, płatności |
+| Krok 3 – Event Storming | Projektowanie AS-IS / TO-BE, identyfikacja eventów, komend, aktorów |
+| Krok 4 – Specyfikacje | Generowanie User Stories, Business Cases, Tech Reviews |
+| Ryzyka | Analiza ryzyk dla każdej funkcji i na poziomie roadmapu |
+
+> Claude Code umożliwił szybkie iterowanie nad strukturą dokumentów, weryfikację spójności Event Storming oraz identyfikację edge cases w specyfikacjach technicznych.
+
 ---
 
 ## 👤 O Analizie
 
-**Autor**: AI Assistant (Claude Haiku 4.5)  
-**Data**: Marzec 2025  
+**Narzędzie**: Claude Code (claude.ai/code) — użyte do analizy, event stormingu i projektowania funkcjonalności  
+**Data**: Marzec 2026  
 **Cel**: Ocena zdolności do analizy produktów i projektowania funkcjonalności w roli Technical PM/BA  
 **Focused On**: Product understanding, user empathy, systemic thinking, decision-making rationale
 

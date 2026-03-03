@@ -15,6 +15,21 @@ Event Storming to technika modelowania procesów biznesowych gdzie:
 
 ## 2. EVENT STORMING - AS-IS (BIEŻĄCY STAN)
 
+### 2.0 Diagram Wizualny AS-IS (Mermaid)
+
+```mermaid
+flowchart LR
+    A1(["👤 Content Manager"]) -->|"KOMENDA: CreateArticle"| AGG1["📄 AGREGAT: Article\nstatus: DRAFT"]
+    AGG1 -->|"EVENT: ArticleContentGenerated"| AGG2["✏️ AGREGAT: Editor\nWYSIWYG"]
+    AGG2 -->|"KOMENDA: EditArticle\nAddImages / UpdateSEOMeta"| EVT1(["EVENT: ArticleEdited\nImagesAdded / SEOMetaUpdated"])
+    EVT1 --> AGG3["📢 AGREGAT: PublicationManager\nWebsite / Facebook / LinkedIn / X"]
+    AGG3 -->|"KOMENDA: PublishArticle"| POL1{"|POLICY:\nAutoAdaptContent\nToChannels|"}
+    POL1 -->|"EVENT: ArticlePublished"| EVT2(["PostCreatedOnFacebook\nPostCreatedOnLinkedIn\nThreadCreatedOnX\nArticleAddedToWebsite"])
+    EVT2 --> AGG4["📋 AGREGAT: PublicationHistory"]
+```
+
+---
+
 ### 2.1 Główny Przepływ - Tworzenie i Publikacja Artykułu
 
 ```
@@ -216,6 +231,27 @@ Event Storming to technika modelowania procesów biznesowych gdzie:
 ---
 
 ## 3. EVENT STORMING - TO-BE (STAN PRZYSZŁY)
+
+### 3.0 Diagram Wizualny TO-BE (Mermaid)
+
+```mermaid
+flowchart TD
+    subgraph COLLAB["🤝 TIER 3: Team Collaboration"]
+        A3(["👥 Team Member"]) -->|"ReviewArticle / LeaveComment"| R1(["ArticleUnderReview\nCommentAdded\nArticleApproved"])
+    end
+    subgraph SCHED["📅 TIER 1: Content Calendar"]
+        A1(["👤 Content Manager"]) -->|"SchedulePublication"| CAL["📅 ContentCalendar\nMonth/Week View\nAI Optimal Time"]
+        R1 -->|"ArticleApproved"| CAL
+        CAL -->|"ScheduledTimeArrives"| PUB(["✅ ArticlePublished\nAll Channels"])
+    end
+    subgraph ANALY["📊 TIER 2: Analytics"]
+        PUB -->|"AnalyticsDataSynced"| MET["📈 ArticleMetrics\nViews / Engagement\nGoogle Ranking / ROI"]
+        MET -->|"PerformanceMetricsCalculated"| DASH["🖥️ Dashboard v2\nRecommendations\nRepurposing Alerts"]
+    end
+    A1 -->|"InviteTeamMember"| A3
+```
+
+---
 
 ### 3.1 Dodane Events i Commands (Nowe Funkcjonalności)
 

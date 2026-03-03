@@ -34,12 +34,14 @@ Floowe **automatyzuje ten proces** poprzez AI, zmniejszając czas z godzin do mi
 ### 1.5 Model Biznesowy
 **Subscription-based SaaS (Software as a Service)**
 
+> ✅ Dane cenowe zweryfikowane bezpośrednio na [floowe.com](https://floowe.com) (Marzec 2026)
+
 | Plan | Cena | Artykuły/Miesiąc | Features |
 |------|------|-----------------|----------|
-| Free | 0 PLN | 3 | Podstawowe funkcjonalności |
-| Basic | 500 PLN | 8 | Standard features |
-| Standard | 700 PLN | 12 | Pełne funkcjonalności |
-| Premium | 900 PLN | 20 | Wszystkie features |
+| Free | 0 PLN | 3 | Automatyczna publikacja: Facebook, LinkedIn, X, strona WWW |
+| Basic | 500 PLN | 8 | j.w. + promocja 50% rabatu na 3 miesiące |
+| Standard | 700 PLN | 12 | j.w. + promocja 50% rabatu na 3 miesiące |
+| Premium | 900 PLN | 20 | j.w. + promocja 50% rabatu na 3 miesiące |
 
 **Dodatki**: 
 - Promocja 50% rabatu na 3 miesiące dla planów Basic, Standard, Premium
