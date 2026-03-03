@@ -535,7 +535,7 @@ Kryteria Akceptacji:
 
 **Uzasadnienie funkcji:**
 
-Problem: Edytynalny zespoły (2+ people) nie mogą efektywnie współpracować w Floowe. Draft artykuł jest tylko widoczny dla autora. Brak formalnego approval процесу. Ryzyko: ktoś publikuje coś źle, bez review.
+Problem: Edytujące zespoły (2+ people) nie mogą efektywnie współpracować w Floowe. Draft artykuł jest tylko widoczny dla autora. Brak formalnego approval procesu. Ryzyko: ktoś publikuje coś źle, bez review.
 
 Rozwiązanie: Built-in collaboration:
 1. **Formalne approval process** – zmniejsza błędy (typos, fact-checking)
