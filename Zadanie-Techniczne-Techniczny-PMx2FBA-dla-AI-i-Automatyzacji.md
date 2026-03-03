@@ -95,4 +95,3 @@ oznacza to brak wymaganego poziomu zrozumienia roli Technicznego PM&#x2F;BA\.
 To zadanie nie jest testem umiejętności pisania dokumentów\.
 
 To test zrozumienia produktu i myślenia systemowego\.
-
