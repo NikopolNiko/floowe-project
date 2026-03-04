@@ -17,40 +17,30 @@ Event Storming to technika modelowania procesów biznesowych gdzie:
 
 ### 2.0 Diagram Wizualny AS-IS (Mermaid)
 
-> **Legenda kolorów** (zgodnie z konwencją Event Storming):
-> 🟡 **Żółty jasny** = Aktor &nbsp;|&nbsp; 🔵 **Niebieski** = Komenda &nbsp;|&nbsp; 🟠 **Pomarańczowy** = Event &nbsp;|&nbsp; 🟡 **Żółty** = Agregat &nbsp;|&nbsp; 🟣 **Fioletowy** = Policy
-
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '15px', 'primaryColor': '#ffffff'}}}%%
 flowchart TD
-    classDef actor     fill:#FFF9C4,stroke:#F9A825,color:#333,font-weight:bold
-    classDef command   fill:#3498DB,stroke:#1A5276,color:#fff,font-weight:bold
-    classDef event     fill:#E67E22,stroke:#784212,color:#fff,font-weight:bold
-    classDef aggregate fill:#F9CA24,stroke:#B7950B,color:#333,font-weight:bold
-    classDef policy    fill:#9B59B6,stroke:#6C3483,color:#fff,font-weight:bold
-
     subgraph BC1["📦 BC: Content Creation"]
         direction TB
-        A1(["👤 Content Manager"])
-        CMD1["CreateArticle"]
-        AGG1["Article\nstatus = DRAFT"]
-        EVT0(["ArticleContentGenerated\n— AI wygenerował treść"])
-        AGG2["Editor ✏️\nWYSIWYG"]
-        CMD2["EditArticle\nAddImages / UpdateSEOMeta"]
-        EVT1(["ArticleEdited\nImagesAdded\nSEOMetaUpdated"])
+        A1(["👤 Aktor:\nContent Manager"])
+        CMD1["🔵 KOMENDA:\nCreateArticle"]
+        AGG1["🟨 AGREGAT:\nArticle\nstatus = DRAFT"]
+        EVT0(["🟠 EVENT:\nArticleContentGenerated\n— AI wygenerował treść"])
+        AGG2["🟨 AGREGAT:\nEditor  ✏️ WYSIWYG"]
+        CMD2["🔵 KOMENDA:\nEditArticle / AddImages\nUpdateSEOMeta"]
+        EVT1(["🟠 EVENT:\nArticleEdited\nImagesAdded\nSEOMetaUpdated"])
     end
 
     subgraph BC2["📦 BC: Publication"]
         direction TB
-        AGG3["PublicationManager\n📢 Website · FB · LI · X"]
-        CMD3["PublishArticle\nchannels[]"]
-        POL1{"AutoAdaptContent\nToChannels"}
-        EVT_PUB(["ArticlePublished\nstatus → PUBLISHED"])
-        EVT2A(["ArticleAddedToWebsite"])
-        EVT2B(["PostCreatedOnFacebook"])
-        EVT2C(["PostCreatedOnLinkedIn"])
-        EVT2D(["ThreadCreatedOnX"])
-        AGG4["PublicationHistory\n📋 audit log"]
+        AGG3["🟨 AGREGAT:\nPublicationManager\n📢 Website · FB · LI · X"]
+        CMD3["🔵 KOMENDA:\nPublishArticle\nchannels[]"]
+        POL1{"🟣 POLICY:\nAutoAdaptContent\nToChannels"}
+        EVT_PUB(["🟠 EVENT:\nArticlePublished\nstatus → PUBLISHED"])
+        EVT2A(["🟠 ArticleAddedToWebsite"])
+        EVT2B(["🟠 PostCreatedOnFacebook"])
+        EVT2C(["🟠 PostCreatedOnLinkedIn"])
+        EVT2D(["🟠 ThreadCreatedOnX"])
+        AGG4["🟨 AGREGAT:\nPublicationHistory\n📋 audit log"]
     end
 
     A1      --> CMD1
@@ -59,6 +49,7 @@ flowchart TD
     EVT0    --> AGG2
     AGG2    --> CMD2
     CMD2    --> EVT1
+
     EVT1    --> AGG3
     AGG3    --> CMD3
     CMD3    --> POL1
@@ -71,12 +62,6 @@ flowchart TD
     EVT2B   --> AGG4
     EVT2C   --> AGG4
     EVT2D   --> AGG4
-
-    class A1 actor
-    class CMD1,CMD2,CMD3 command
-    class EVT0,EVT1,EVT_PUB,EVT2A,EVT2B,EVT2C,EVT2D event
-    class AGG1,AGG2,AGG3,AGG4 aggregate
-    class POL1 policy
 ```
 
 ---
@@ -285,52 +270,27 @@ flowchart TD
 
 ### 3.0 Diagram Wizualny TO-BE (Mermaid)
 
-> **Legenda kolorów**: 🟡 Aktor &nbsp;|&nbsp; 🔵 Komenda &nbsp;|&nbsp; 🟠 Event &nbsp;|&nbsp; 🟡 Agregat &nbsp;|&nbsp; 🟣 Policy
-
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '15px', 'primaryColor': '#ffffff'}}}%%
 flowchart TD
-    classDef actor     fill:#FFF9C4,stroke:#F9A825,color:#333,font-weight:bold
-    classDef command   fill:#3498DB,stroke:#1A5276,color:#fff,font-weight:bold
-    classDef event     fill:#E67E22,stroke:#784212,color:#fff,font-weight:bold
-    classDef aggregate fill:#F9CA24,stroke:#B7950B,color:#333,font-weight:bold
-    classDef policy    fill:#9B59B6,stroke:#6C3483,color:#fff,font-weight:bold
-
-    subgraph BC_COLLAB["📦 BC: Collaboration"]
-        direction TB
-        A3(["Team Member"])
-        CMD_R["ReviewArticle\nLeaveComment\nApproveArticle"]
-        EVT_R(["ArticleUnderReview\nCommentAdded\nArticleApproved"])
-        A3 --> CMD_R --> EVT_R
+    subgraph BC_COLLAB["📦 Bounded Context: Collaboration"]
+        A3(["👥 Team Member"])
+        R1(["ArticleUnderReview\nCommentAdded\nArticleApproved"])
+        A3 -->|"ReviewArticle / LeaveComment"| R1
     end
-
-    subgraph BC_SCHED["📦 BC: Scheduling"]
-        direction TB
-        AGG_CAL["ContentCalendar 📅\nMonth/Week View"]
-        CMD_S["SchedulePublication\nAI Optimal Time"]
-        EVT_S(["ArticleScheduled\n→ ArticlePublished"])
-        AGG_CAL --> CMD_S --> EVT_S
+    subgraph BC_SCHED["📦 Bounded Context: Scheduling"]
+        CAL["📅 ContentCalendar\nMonth/Week View\nAI Optimal Time"]
+        PUB(["✅ ArticlePublished\nAll Channels"])
+        CAL -->|"ScheduledTimeArrives"| PUB
     end
-
-    subgraph BC_ANALYTICS["📦 BC: Analytics"]
-        direction TB
-        AGG_MET["ArticleMetrics 📈\nViews · Engagement · Ranking"]
-        POL_REC{"GenerateRecommendations\n+ RepurposingAlerts"}
-        DASH["Dashboard v2 🖥️\nROI · Trends · Alerts"]
-        AGG_MET --> POL_REC --> DASH
+    subgraph BC_ANALYTICS["📦 Bounded Context: Analytics"]
+        MET["📈 ArticleMetrics\nViews / Engagement\nGoogle Ranking / ROI"]
+        DASH["🖥️ Dashboard v2\nRecommendations\nRepurposing Alerts"]
+        MET -->|"PerformanceMetricsCalculated"| DASH
     end
-
-    A1(["👤 Content Manager"])
-    A1 -->|"InviteTeamMember"| A3
-    A1 -->|"SchedulePublication"| AGG_CAL
-    EVT_R   -->|"ArticleApproved →"| AGG_CAL
-    EVT_S   -->|"AnalyticsDataSynced"| AGG_MET
-
-    class A1,A3 actor
-    class CMD_R,CMD_S command
-    class EVT_R,EVT_S event
-    class AGG_CAL,AGG_MET,DASH aggregate
-    class POL_REC policy
+    A1(["👤 Content Manager"]) -->|"InviteTeamMember"| A3
+    A1 -->|"SchedulePublication"| CAL
+    R1 -->|"ArticleApproved"| CAL
+    PUB -->|"AnalyticsDataSynced"| MET
 ```
 
 ---
