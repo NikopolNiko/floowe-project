@@ -280,12 +280,19 @@ Zgodnie z wymaganiem zadania, analiza została przeprowadzona przy użyciu **[Cl
 3. **Event Storming**: [03-Event-Storming-AS-IS-TO-BE.md](03-Event-Storming-AS-IS-TO-BE.md) (system design thinking)
 4. **Features**: [04-Specyfikacja-Funkcjonalności.md](04-Specyfikacja-Funkcjonalności.md) (detailed specs)
 5. **Risk & Mitigation**: [05-Ryzyka-Wyzwania-Globalne.md](05-Ryzyka-Wyzwania-Globalne.md) (risk management)
+6. **[Weryfikacja Zrozumienia](#-weryfikacja-zrozumienia--odpowiedzi-na-4-kryteria-z-zadania)** — bezpośrednie odpowiedzi na 4 kryteria oceny z zadania:
+   - Kryterium 1: Wyjaśnienie decyzji projektowych
+   - Kryterium 2: Objaśnienie diagramu Event Storming
+   - Kryterium 3: Różnica Event / Komenda / Akcja UI
+   - Kryterium 4: Uzasadnienie sensu biznesowego funkcji
 
 ---
 
-## ❓ Przygotowanie do Rozmowy Technicznej
+## ❓ Weryfikacja Zrozumienia — Odpowiedzi na 4 Kryteria z Zadania
 
-### Pytanie 1: Czym różni się Event od Komendy od akcji UI?
+> Zadanie wymaga zdolności do: (1) wyjaśnienia decyzji projektowych, (2) obrony własnego diagramu Event Storming, (3) wytłumaczenia różnicy Event/Komenda/UI, (4) uzasadnienia sensu biznesowego funkcji. Poniżej bezpośrednie odpowiedzi.
+
+### Kryterium 3: Czym różni się Event od Komendy od akcji UI?
 
 | Pojęcie | Definicja | Przykład w Floowe |
 |---------|-----------|-------------------|
@@ -297,7 +304,7 @@ Zgodnie z wymaganiem zadania, analiza została przeprowadzona przy użyciu **[Cl
 
 ---
 
-### Pytanie 2: Dlaczego Content Calendar jest Phase 1, a nie Analytics?
+### Kryterium 4 — Uzasadnienie biznesowe: Dlaczego Content Calendar przed Analytics?
 
 **Decyzja oparta na 3 kryteriach**:
 
@@ -311,7 +318,7 @@ Zgodnie z wymaganiem zadania, analiza została przeprowadzona przy użyciu **[Cl
 
 ---
 
-### Pytanie 3: Dlaczego te 3 funkcje, a nie inne?
+### Kryterium 1 — Wyjaśnienie decyzji projektowych: Dlaczego te 3 funkcje, a nie inne?
 
 **Ramy decyzyjne — Impact vs Effort vs Risk**:
 
@@ -339,7 +346,7 @@ Odrzucone alternatywy i powód:
 
 ---
 
-### Pytanie 4: Co to jest Bounded Context i jak go widzisz w modelu Floowe?
+### Kryterium 2 — Objaśnienie diagramu Event Storming: Bounded Context
 
 Bounded Context = logiczna granica domeny, w której określone pojęcia mają jednoznaczne znaczenie i model danych jest spójny wewnętrznie.
 
@@ -356,7 +363,7 @@ Granice widać po tym, że **`Article` w BC Content Creation** to `{title, conte
 
 ---
 
-### Pytanie 5: Jakie są założenia których nie możesz potwierdzić bez dostępu do kodu?
+### Dodatkowe: Założenia których nie można potwierdzić bez dostępu do kodu
 
 1. **Stack techniczny** — założono React + Node.js + PostgreSQL na podstawie typowego SaaS polskiego origin. Może być inne (Next.js, Laravel, różna baza).
 2. **Czy WordPress integration istnieje** — na stronie nie potwierdzone jednoznacznie, oznaczone jako `?`
