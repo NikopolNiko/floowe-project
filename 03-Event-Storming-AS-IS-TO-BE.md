@@ -18,26 +18,50 @@ Event Storming to technika modelowania procesów biznesowych gdzie:
 ### 2.0 Diagram Wizualny AS-IS (Mermaid)
 
 ```mermaid
-flowchart LR
-    subgraph BC1["📦 Bounded Context: Content Creation"]
-        A1(["👤 Content Manager"])
-        AGG1["📄 AGREGAT: Article\nstatus: DRAFT"]
-        AGG2["✏️ AGREGAT: Editor\nWYSIWYG"]
-        EVT1(["EVENT: ArticleEdited\nImagesAdded / SEOMetaUpdated"])
+flowchart TD
+    subgraph BC1["📦 BC: Content Creation"]
+        direction TB
+        A1(["👤 Aktor:\nContent Manager"])
+        CMD1["🔵 KOMENDA:\nCreateArticle"]
+        AGG1["🟨 AGREGAT:\nArticle\nstatus = DRAFT"]
+        EVT0(["🟠 EVENT:\nArticleContentGenerated\n— AI wygenerował treść"])
+        AGG2["🟨 AGREGAT:\nEditor  ✏️ WYSIWYG"]
+        CMD2["🔵 KOMENDA:\nEditArticle / AddImages\nUpdateSEOMeta"]
+        EVT1(["🟠 EVENT:\nArticleEdited\nImagesAdded\nSEOMetaUpdated"])
     end
-    subgraph BC2["📦 Bounded Context: Publication"]
-        AGG3["📢 AGREGAT: PublicationManager\nWebsite / Facebook / LinkedIn / X"]
-        POL1{"|POLICY:\nAutoAdaptContent\nToChannels|"}
-        EVT2(["PostCreatedOnFacebook\nPostCreatedOnLinkedIn\nThreadCreatedOnX\nArticleAddedToWebsite"])
-        AGG4["📋 AGREGAT: PublicationHistory"]
+
+    subgraph BC2["📦 BC: Publication"]
+        direction TB
+        AGG3["🟨 AGREGAT:\nPublicationManager\n📢 Website · FB · LI · X"]
+        CMD3["🔵 KOMENDA:\nPublishArticle\nchannels[]"]
+        POL1{"🟣 POLICY:\nAutoAdaptContent\nToChannels"}
+        EVT_PUB(["🟠 EVENT:\nArticlePublished\nstatus → PUBLISHED"])
+        EVT2A(["🟠 ArticleAddedToWebsite"])
+        EVT2B(["🟠 PostCreatedOnFacebook"])
+        EVT2C(["🟠 PostCreatedOnLinkedIn"])
+        EVT2D(["🟠 ThreadCreatedOnX"])
+        AGG4["🟨 AGREGAT:\nPublicationHistory\n📋 audit log"]
     end
-    A1 -->|"KOMENDA: CreateArticle"| AGG1
-    AGG1 -->|"EVENT: ArticleContentGenerated"| AGG2
-    AGG2 -->|"KOMENDA: EditArticle\nAddImages / UpdateSEOMeta"| EVT1
-    EVT1 --> AGG3
-    AGG3 -->|"KOMENDA: PublishArticle"| POL1
-    POL1 -->|"EVENT: ArticlePublished"| EVT2
-    EVT2 --> AGG4
+
+    A1      --> CMD1
+    CMD1    --> AGG1
+    AGG1    --> EVT0
+    EVT0    --> AGG2
+    AGG2    --> CMD2
+    CMD2    --> EVT1
+
+    EVT1    --> AGG3
+    AGG3    --> CMD3
+    CMD3    --> POL1
+    POL1    --> EVT_PUB
+    EVT_PUB --> EVT2A
+    EVT_PUB --> EVT2B
+    EVT_PUB --> EVT2C
+    EVT_PUB --> EVT2D
+    EVT2A   --> AGG4
+    EVT2B   --> AGG4
+    EVT2C   --> AGG4
+    EVT2D   --> AGG4
 ```
 
 ---
