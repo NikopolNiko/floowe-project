@@ -294,7 +294,9 @@ Zgodnie z wymaganiem zadania, analiza została przeprowadzona przy użyciu **[Cl
 
 ---
 
-### Kryterium 1 — Wyjaśnienie decyzji projektowych
+## 🏗️ Kryterium 1 — Wyjaśnienie decyzji projektowych
+
+> 💬 **Pytanie na rozmowie:** *„Dlaczego wybrałeś właśnie te 3 funkcje? Jak doszedłeś do tej listy? Dlaczego taka kolejność faz?"*
 
 #### 1A: Dlaczego te 3 funkcje, a nie inne?
 
@@ -416,7 +418,9 @@ Bufor dla Analytics wyższy procentowo ze względu na nieciągłość zewnętrzn
 
 ---
 
-### Kryterium 2 — Rozumienie diagramu Event Storming
+## 🗺️ Kryterium 2 — Rozumienie diagramu Event Storming
+
+> 💬 **Pytanie na rozmowie:** *„Przejdź mnie przez swój diagram Event Storming. Co to jest Bounded Context? Dlaczego tutaj, a nie tam?"*
 
 #### 2A: Legenda — co oznacza każdy element
 
@@ -515,7 +519,9 @@ Komenda: PublishArticle(channels=[FB, LI, X, Website])
 
 ---
 
-### Kryterium 3 — Różnica Event / Komenda / Akcja UI / Policy / Agregat
+## 🔍 Kryterium 3 — Różnica Event / Komenda / Akcja UI / Policy / Agregat
+
+> 💬 **Pytanie na rozmowie:** *„Wytłumacz mi czym różni się Event od Komendy. Co to jest Akcja UI? Gdzie kończy się warstwa prezentacji, a zaczyna domena?"*
 
 #### 3A: Tabela wszystkich 5 elementów
 
@@ -582,7 +588,9 @@ Odpowiedź: Event Sourcing zasada — historia jest append-only. Żeby "cofnąć
 
 ---
 
-### Kryterium 4 — Uzasadnienie biznesowe z miernikami sukcesu
+## 💼 Kryterium 4 — Uzasadnienie biznesowe z miernikami sukcesu
+
+> 💬 **Pytanie na rozmowie:** *„Dlaczego akurat ta funkcja ma sens biznesowy? Co konkretnie zyska firma? Jak zmierzysz że zadziałało?"*
 
 #### Feature #1: Real-Time Analytics Dashboard
 
