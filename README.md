@@ -304,9 +304,24 @@ Zgodnie z wymaganiem zadania, analiza została przeprowadzona przy użyciu **[Cl
 
 ---
 
-### Kryterium 4 — Uzasadnienie biznesowe: Dlaczego Content Calendar przed Analytics?
+### Kryterium 4 — Uzasadnienie sensu biznesowego wszystkich 3 funkcji
 
-**Decyzja oparta na 3 kryteriach**:
+#### Feature #1: Real-Time Analytics Dashboard
+**Problem biznesowy**: Użytkownik Floowe publikuje artykuły i nie wie czy przynoszą efekty. Po 60 dniach bez widocznych wyników rezygnuje z subskrypcji (churn).  
+**Wartość**: Dashboard pokazuje ROI (views, ranking, engagement) → użytkownik *widzi* wartość produktu → zostaje i poleca.  
+**Szacunek**: +40% retention = przy 1000 użytkownikach i planie 500 PLN/m → +200K PLN ARR.
+
+#### Feature #2: Content Calendar & Publishing Scheduler
+**Problem biznesowy**: Regularne publikacje (3x/tydzień) zwiększają pozycje SEO o 15-30%. Użytkownicy Floowe publikują ad-hoc — raz 5 artykułów dziennie, potem cisza przez tydzień, co kasuje efekty SEO.  
+**Wartość**: Calendar wymusza rytm publikacji → lepsze SEO → użytkownik widzi wzrost ruchu → atrybucja wartości do Floowe.  
+**Szacunek**: +25% time saved na planowaniu, +15% SEO improvement dla aktywnych użytkowników.
+
+#### Feature #3: Team Collaboration & Review Workflow
+**Problem biznesowy**: Agencje marketingowe i większe SME (5-20 osób) nie mogą używać Floowe bo brak approval workflow — ktoś może opublikować niezweryfikowaną treść. To blokuje sprzedaż do segmentu enterprise.  
+**Wartość**: Team seats ($15/użytkownik/miesiąc) + odblokowanie segmentu agencji → nowe źródło przychodów.  
+**Szacunek**: +$50K/rok z team planów, wejście w segment agencji (10x większy ARPU niż SME solo).
+
+#### Dlaczego Content Calendar jest Phase 1, a nie Analytics?
 
 | Kryterium | Content Calendar (Phase 1) | Analytics (Phase 2) |
 |-----------|---------------------------|---------------------|
@@ -314,13 +329,13 @@ Zgodnie z wymaganiem zadania, analiza została przeprowadzona przy użyciu **[Cl
 | **Ryzyko** | Niskie — brak zewnętrznych zależności | Wysokie — GA4 delays 24h, API rate limits, token security |
 | **Time-to-value** | 2 miesiące, użytkownik widzi wartość od razu | 4 miesiące, wartość widoczna dopiero po zebraniu danych historycznych |
 
-**Uzasadnienie biznesowe**: Content Calendar rozwiązuje problem regularności publikacji (bezpośredni wpływ na SEO użytkownika) bez ryzyka regulacyjnego. Analytics bez danych historycznych nie daje wartości — musi być poprzedzone miesiącami regularnych publikacji, które Content Calendar właśnie umożliwia. Fazy są ze sobą zależne: Calendar → dane → Analytics.
+**Kluczowa zależność**: Analytics bez danych historycznych nie daje wartości. Calendar generuje dane (regularne publikacje) → Analytics je mierzy. Fazy muszą iść w tej kolejności.
 
 ---
 
 ### Kryterium 1 — Wyjaśnienie decyzji projektowych: Dlaczego te 3 funkcje, a nie inne?
 
-**Ramy decyzyjne — Impact vs Effort vs Risk**:
+**Ramy decyzyjne — Impact vs Effort**:
 
 ```
                 HIGH IMPACT
@@ -329,10 +344,12 @@ Zgodnie z wymaganiem zadania, analiza została przeprowadzona przy użyciu **[Cl
                     │
 LOW EFFORT ─────────┼───────── HIGH EFFORT
                     │
-  Content Cal ●     │
+                    │  ● Content Cal
                     │
                 LOW IMPACT
 ```
+
+> Effort: Content Calendar (160-200h) < Analytics (120-160h API complexity) < Team Collaboration (200-240h RBAC)
 
 Wybrane funkcje pokrywają **3 różne problemy wartości**:
 1. **Analytics** → użytkownik nie widzi ROI → churn po 60 dniach (retention problem)
