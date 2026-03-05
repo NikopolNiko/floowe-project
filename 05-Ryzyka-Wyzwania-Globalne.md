@@ -98,7 +98,7 @@ If infra costs exceed $5K/month → pause rolling out to 10K new users. Focus on
 - If token leaks → Google suspieza Floowe account → API disconnect
 - GDPR fine: up to €20M or 4% of annual revenue
 - User lawsuits: "My analytics data was disclosed"
-- Reputation damage: "Floowe security breach" 😱
+- Reputation damage: "Floowe security breach" 
 
 **Identifiers**:
 - Security audit fails SOC2 section
