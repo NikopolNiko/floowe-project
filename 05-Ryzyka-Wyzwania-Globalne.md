@@ -553,5 +553,5 @@ Ale **ryzyka są realne i wielorakie** – techniczne, biznesowe, organizacyjne.
 4. Proactive monitoring (catch issues early)
 5. User education (adoption matters more than features)
 
-Jeśli zespół wykonaje plan, Floowe może osiągnąć **2x growth** w течение roku.
+Jeśli zespół wykonaje plan, Floowe może osiągnąć **2x growth** w ciągu roku.
 
